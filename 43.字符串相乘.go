@@ -1,40 +1,36 @@
 package main
 
+import "strings"
+
 func main() {
-	
+	println(multiply("123", "456"))
 }
 func multiply(num1 string, num2 string) string {
-	if num1 == "0" || num2 =="0"{
+	if num1 == "0" || num2 == "0" {
 		return "0"
 	}
-	l1 := len(num1)
-	ans := "0"
+	l1, l2 := len(num1), len(num2)
+	ans := make([]byte, l1+l2)
+	var c byte = 0
 	for i := l1 - 1; i >= 0; i-- {
-		one := mulByte(num1[i], num2,l1-i-1)
-		println(one)
+		intn1 := num1[i] - '0'
+		for j := l2 - 1; j >= 0; j-- {
+			ji := intn1*(num2[j]-'0') + c + ans[i+j+1]
+			c = ji / 10
+			ans[i+j+1] = ji % 10
+		}
+		ans[i] = c
+		c = 0
+		//output(ans)
 	}
-	return ans
+	for i, v := range ans {
+		ans[i] = v + '0'
+	}
+	return strings.TrimLeft(string(ans), "0")
 }
-func mulByte(n1 byte, n2 string, cnt0 int) string{
-	var ret []byte
-	intn1 := n1-'0'
-	ln2 := len(n2)
-	var c byte=0
-	for i:=ln2-1;i>=0;i-- {
-		ji := intn1 * (n2[i]-'0')+c
-		c = ji /10
-		ret = append(ret, ji%10+'0')
+func output(a []byte) {
+	for _, v := range a {
+		print(v)
 	}
-	if c > 0 {
-		ret = append(ret, c+'0')
-	}
-	lend := len(ret)
-	ans := []byte{}
-	for k := 1; k <= lend; k++ {
-		ans = append(ans, ret[lend-k])
-	}
-	for i:=0;i<cnt0;i++{
-		ans = append(ans, '0')
-	}
-	return string(ans)
+	println()
 }
